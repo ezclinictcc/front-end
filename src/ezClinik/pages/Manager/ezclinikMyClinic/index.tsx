@@ -28,6 +28,8 @@ import * as yup from "yup";
 import getValidationErros from "../../../utils/validateErrors";
 import SelectBox from "../../../Components/SelectBox";
 import { clinicSpeciality } from "../../../utils/clinicSpeciality";
+import { selectLoggedUser } from "../../../store/redux/user/userSlice";
+import { useSelector } from "react-redux";
 
 /**
  * @description Home Page.
@@ -35,6 +37,7 @@ import { clinicSpeciality } from "../../../utils/clinicSpeciality";
  */
 export const EZClinikMyClinic: React.FC<{}> = () => {
   const { fireToast }: any = useContext(ToastContext);
+  const loggedUser = useSelector(selectLoggedUser);
   const formRef = useRef<FormHandles & HTMLFormElement>(null);
 
   const { fetch: insertClinicRequest, pending: insertUserLoad } = useAsync({
@@ -73,6 +76,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
       .validate(data, { abortEarly: false })
       .then(() => {
         data.number = Number(data.number);
+        data.idUser = loggedUser.tokenDecode.idUser;
         insertClinicRequest(data);
         formRef.current?.setErrors({});
       })

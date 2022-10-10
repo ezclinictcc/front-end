@@ -7,5 +7,6 @@ export enum IHttpMethod {
 }
 
 export enum ServicesURL {
-  EZCLINIK = 'ezclinik',
+  IDENTITY = 'identityService',
+  GATEWAY = 'gatewayService',
 }

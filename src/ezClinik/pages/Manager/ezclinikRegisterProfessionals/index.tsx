@@ -1,12 +1,15 @@
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FillButton } from "../../../Components/Buttons/FillButton";
 import InputSoft from "../../../Components/InputSoft";
 import Text from "../../../Components/Text";
 import useAsync from "../../../hooks/useAsync";
-import { insertUser } from "../../../services/controllers/identity-controller";
+import {
+  getClinicData,
+  insertUser,
+} from "../../../services/controllers/identity-controller";
 import { ToastContext } from "../../../store/toast";
 import { Sizes } from "../../../ts/enum/componentSize";
 import { CriticyType } from "../../../ts/enum/criticyType";
@@ -23,6 +26,8 @@ import {
 } from "./styles";
 import * as yup from "yup";
 import getValidationErros from "../../../utils/validateErrors";
+import { useSelector } from "react-redux";
+import { selectLoggedUser } from "../../../store/redux/user/userSlice";
 
 /**
  * @description Home Page.
@@ -30,8 +35,10 @@ import getValidationErros from "../../../utils/validateErrors";
  */
 export const EZClinikRegisterProfessionals: React.FC<{}> = () => {
   const { fireToast }: any = useContext(ToastContext);
+  const loggedUser = useSelector(selectLoggedUser);
   const navigate = useNavigate();
   const formRef = useRef<FormHandles & HTMLFormElement>(null);
+  const [clinicId, setClinicId] = useState<string>("");
 
   const { fetch: insertUserRequest, pending: insertUserLoad } = useAsync({
     promiseFn: insertUser,
@@ -50,6 +57,25 @@ export const EZClinikRegisterProfessionals: React.FC<{}> = () => {
       });
     },
   });
+
+  const { fetch: getClinic, pending: getClinicLoad } = useAsync({
+    promiseFn: getClinicData,
+    onData: (data) => {
+      console.log("data: ", data);
+      setClinicId(String(data[0].id));
+    },
+    onError: (_error: any) => {
+      fireToast({
+        criticy: CriticyType.error,
+        message:
+          "Não foi possível carregar a clínica para o Profissional. Atualize a página.",
+      });
+    },
+  });
+
+  useEffect(() => {
+    getClinic(loggedUser.tokenDecode.idUser);
+  }, []);
 
   function getSchema() {
     return yup.object().shape({
@@ -72,11 +98,14 @@ export const EZClinikRegisterProfessionals: React.FC<{}> = () => {
     getSchema()
       .validate(data, { abortEarly: false })
       .then(() => {
-        data.idUserType = "65475e6a-1ad2-433a-967e-ad6b230c0557";
-        data.idProfile = "40c617cf-a41a-45e0-a855-bada1773217f";
-        data.number = Number(data.number);
-        insertUserRequest(data);
-        formRef.current?.setErrors({});
+        if (clinicId) {
+          data.idUserType = "e25ffc8b-6e78-45ee-99da-656f8e32dc91";
+          data.idProfile = "1bd8d9f8-9860-4f0e-8303-a8ad61a4cb45";
+          data.number = Number(data.number);
+          data.idClinic = clinicId;
+          insertUserRequest(data);
+          formRef.current?.setErrors({});
+        }
       })
       .catch((err: any) => {
         if (err instanceof yup.ValidationError) {

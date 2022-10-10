@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getBaseURL } from "../propertiesAccess";
+import loggedUser from '../../../../.history/src/ezClinik/utils/loggedUser/index_20221009192938';
 
 /**
  * @description makes http request according to the informed data.
@@ -16,10 +17,14 @@ const fetch = ({
   service,
 }: any) => {
   return new Promise(async (resolve, reject) => {
+    const loggedSession = sessionStorage.getItem('persist:root');
+    const tokenSplit = loggedSession && JSON.parse(JSON.parse(loggedSession).loggedUser);
+    console.log('tokenSplit: ', tokenSplit.token);
     if (!service) throw Error("url.not.found");
     axios({
       headers: {
         ...headers,
+        Authorization: tokenSplit.token 
       },
       url: `${getURl(service)}${path}`,
       method,
@@ -44,9 +49,12 @@ const fetch = ({
  */
 
 function getURl(service: string) {
+  console.log('cai aqui: ', service)
   const baseURLS: string[] = getBaseURL().split("|") || [];
+  console.log('baseURLS: ', baseURLS);
   const baseURL: string[] =
     baseURLS?.filter((url) => url.includes(service)) || [];
+    console.log('baseURL: ', baseURL);
   if (!baseURL[0]) {
     throw Error("url.not.found");
   }

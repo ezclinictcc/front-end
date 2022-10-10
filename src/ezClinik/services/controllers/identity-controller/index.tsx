@@ -40,8 +40,8 @@ export function getUsersData(value?: string) {
   return fetch({
     method: IHttpMethod.GET,
     path: endpoints.user,
-    params: value ? { idUserType: value } : null,
-    service: ServicesURL.EZCLINIK,
+    params: value ? { idClinic: value } : null,
+    service: ServicesURL.IDENTITY,
   });
 }
 
@@ -50,7 +50,7 @@ export function insertUser(user: IUser) {
     method: IHttpMethod.POST,
     path: endpoints.user,
     data: user,
-    service: ServicesURL.EZCLINIK,
+    service: ServicesURL.IDENTITY,
   });
 }
 
@@ -59,7 +59,7 @@ export function updateUser(user: IUser) {
     method: IHttpMethod.PUT,
     path: endpoints.user,
     data: user,
-    service: ServicesURL.EZCLINIK,
+    service: ServicesURL.IDENTITY,
   });
 }
 
@@ -67,17 +67,18 @@ export function deleteUser(userId: string) {
   return fetch({
     method: IHttpMethod.DELETE,
     path: `${endpoints.user}/${userId}`,
-    service: ServicesURL.EZCLINIK,
+    service: ServicesURL.IDENTITY,
   });
 }
 
 //----------------CLINIC----------------//
 
-export function getClinicData() {
+export function getClinicData(value?: string) {
   return fetch({
     method: IHttpMethod.GET,
     path: endpoints.clinic,
-    service: ServicesURL.EZCLINIK,
+    params: value ? { idUser: value } : null,
+    service: ServicesURL.IDENTITY,
   });
 }
 
@@ -86,7 +87,7 @@ export function insertClinic(clinic: IClinic) {
     method: IHttpMethod.POST,
     path: endpoints.clinic,
     data: clinic,
-    service: ServicesURL.EZCLINIK,
+    service: ServicesURL.IDENTITY,
   });
 }
 
@@ -95,7 +96,7 @@ export function updateClinic(clinic: IClinic) {
     method: IHttpMethod.PUT,
     path: endpoints.clinic,
     data: clinic,
-    service: ServicesURL.EZCLINIK,
+    service: ServicesURL.IDENTITY,
   });
 }
 
@@ -103,7 +104,7 @@ export function deleteClinic(clinicId: string) {
   return fetch({
     method: IHttpMethod.DELETE,
     path: `${endpoints.clinic}/${clinicId}`,
-    service: ServicesURL.EZCLINIK,
+    service: ServicesURL.IDENTITY,
   });
 }
 
@@ -113,6 +114,6 @@ export function getProfieData() {
   return fetch({
     method: IHttpMethod.GET,
     path: endpoints.profile,
-    service: ServicesURL.EZCLINIK,
+    service: ServicesURL.IDENTITY,
   });
 }

@@ -1,7 +1,13 @@
 import React, { useContext } from "react";
+import { useDispatch } from "react-redux";
 import LogoutIcon from "../../../assets/icons/LogoutIcon";
 import appLogo from "../../../assets/logo.png";
+import useAsync from "../../../hooks/useAsync";
+import { doLogout } from "../../../services/controllers/gateway-controllet";
+import { userLogOut } from "../../../store/redux/user/userSlice";
+import { ToastContext } from "../../../store/toast";
 import { TransitionContext } from "../../../store/transitionLogin";
+import { CriticyType } from "../../../ts/enum/criticyType";
 import { StyContainer, StyLabelText, StyUserInfo } from "./styles";
 
 /**
@@ -11,6 +17,27 @@ import { StyContainer, StyLabelText, StyUserInfo } from "./styles";
 export const AppHeader: React.FC<{}> = () => {
   const { setHasTransition, setNavigateTo }: any =
     useContext(TransitionContext);
+  const dispatch = useDispatch();
+  const { fireToast }: any = useContext(ToastContext);
+
+  const { fetch: doLogoutRequest, pending: doLogoutLoad } = useAsync({
+    promiseFn: doLogout,
+    onData: (data) => {
+      dispatch(userLogOut());
+      fireToast({
+        criticy: CriticyType.success,
+        message: "Logout Realizado com Sucesso.",
+      });
+      setHasTransition(true);
+      setNavigateTo("./login");
+    },
+    onError: (_error: any) => {
+      fireToast({
+        criticy: CriticyType.error,
+        message: "Não foi possível realizar o logout.",
+      });
+    },
+  });
 
   return (
     <>
@@ -38,8 +65,7 @@ export const AppHeader: React.FC<{}> = () => {
         <StyUserInfo>
           <button
             onClick={() => {
-              setHasTransition(true);
-              setNavigateTo("./login");
+              doLogoutRequest();
             }}
           >
             <LogoutIcon width={25} height={25} fill="#FFFFFF" />

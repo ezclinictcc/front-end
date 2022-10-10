@@ -1,11 +1,11 @@
 export const userTypeResponse: any = {
   MANAGER: {
-    id: "2c68ab70-d037-4322-bb7e-5f18cf46caaa",
+    id: "4432ffdc-ee48-4678-9ed2-b2b616aa664e",
   },
   DOCTOR: {
-    id: "65475e6a-1ad2-433a-967e-ad6b230c0557",
+    id: "e25ffc8b-6e78-45ee-99da-656f8e32dc91",
   },
-  PATIANT: {
-    id: "103bd18a-3aec-4684-87bb-e695bc9accc9",
+  PATIENT: {
+    id: "91f4a65a-bc48-4750-8711-26b5ab107672",
   },
 };

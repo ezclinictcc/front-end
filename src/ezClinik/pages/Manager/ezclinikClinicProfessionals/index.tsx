@@ -1,12 +1,13 @@
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FillButton } from "../../../Components/Buttons/FillButton";
 import InputSoft from "../../../Components/InputSoft";
 import Text from "../../../Components/Text";
 import useAsync from "../../../hooks/useAsync";
 import {
+  getClinicData,
   getUsersData,
   insertUser,
 } from "../../../services/controllers/identity-controller";
@@ -30,6 +31,8 @@ import getValidationErros from "../../../utils/validateErrors";
 import AsyncDataTable from "../../../Components/AsyncDataTable";
 import NoFillButton from "../../../Components/Buttons/NoFillButton";
 import SimpleInput from "../../../Components/SimpleInput";
+import { useSelector } from "react-redux";
+import { selectLoggedUser } from "../../../store/redux/user/userSlice";
 
 /**
  * @description Home Page.
@@ -37,9 +40,11 @@ import SimpleInput from "../../../Components/SimpleInput";
  */
 export const EZClinikClinicProfessionals: React.FC<{}> = () => {
   const { fireToast }: any = useContext(ToastContext);
+  const loggedUser = useSelector(selectLoggedUser);
   const navigate = useNavigate();
   const formRef = useRef<FormHandles & HTMLFormElement>(null);
   const [emailFilter, setEmailFilter] = useState<string>("");
+  const [clinicId, setClinicId] = useState<string>("");
 
   const { fetch: insertUserRequest, pending: insertUserLoad } = useAsync({
     promiseFn: insertUser,
@@ -58,6 +63,25 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
       });
     },
   });
+
+  const { fetch: getClinic, pending: getClinicLoad } = useAsync({
+    promiseFn: getClinicData,
+    onData: (data) => {
+      console.log("data: ", data);
+      setClinicId(String(data[0].id));
+    },
+    onError: (_error: any) => {
+      fireToast({
+        criticy: CriticyType.error,
+        message:
+          "Não foi possível carregar a clínica para o Profissional. Atualize a página.",
+      });
+    },
+  });
+
+  useEffect(() => {
+    getClinic(loggedUser.tokenDecode.idUser);
+  }, []);
 
   function getSchema() {
     return yup.object().shape({
@@ -125,41 +149,43 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
             color="rgb(0,185,156)"
           />
         </StyFilters>
-        <AsyncDataTable
-          promiseFn={getUsersData}
-          //   onChange={(user: any) => handleSelectedUsers(user)}
-          //   onRowClick={(userData: any) => openModalByUserId(userData)}
-          //   onChangeId={(usersId: any) => setSelectedUsersId(usersId)}
-          headers={["Nome", "E-mail"]}
-          columns={["name", "email"]}
-          customWidth={["3%", "47%", "50%"]}
-          initialOrdenate="name"
-          id="Basic-Table-User"
-          rowKey="id"
-          disableKey="na_status"
-          disableKeyValue="Inativo"
-          paramsFilter={"65475e6a-1ad2-433a-967e-ad6b230c0557"}
-          perPageColumn={["25", "50", "100", "200", "500"]}
-          bundles={{
-            qttSearch: "Profissional",
-            showing: "Exibindo",
-            of: "de",
-            rowsSelected: "selecionado",
-            page: "Páginas",
-            qttSearchPlural: "Profissionais",
-            rowsSelectedPlural: "selecionados",
-            noData: "Sem Data",
-            registration: "registrado",
-            registrationPlural: "registrados",
-          }}
-          initialOrder={{
-            orderName: "name",
-            orderGrowing: true,
-          }}
-          //buttonsActions={buttonsActions}
-          //   reloadTable={activeInactivePending || deleteUserPending}
-          //   loading={activeInactivePending || deleteUserPending}
-        />
+        {clinicId && (
+          <AsyncDataTable
+            promiseFn={getUsersData}
+            //   onChange={(user: any) => handleSelectedUsers(user)}
+            //   onRowClick={(userData: any) => openModalByUserId(userData)}
+            //   onChangeId={(usersId: any) => setSelectedUsersId(usersId)}
+            headers={["Nome", "E-mail"]}
+            columns={["name", "email"]}
+            customWidth={["3%", "47%", "50%"]}
+            initialOrdenate="name"
+            id="Basic-Table-User"
+            rowKey="id"
+            disableKey="na_status"
+            disableKeyValue="Inativo"
+            paramsFilter={clinicId}
+            perPageColumn={["25", "50", "100", "200", "500"]}
+            bundles={{
+              qttSearch: "Profissional",
+              showing: "Exibindo",
+              of: "de",
+              rowsSelected: "selecionado",
+              page: "Páginas",
+              qttSearchPlural: "Profissionais",
+              rowsSelectedPlural: "selecionados",
+              noData: "Sem Data",
+              registration: "registrado",
+              registrationPlural: "registrados",
+            }}
+            initialOrder={{
+              orderName: "name",
+              orderGrowing: true,
+            }}
+            //buttonsActions={buttonsActions}
+            //   reloadTable={activeInactivePending || deleteUserPending}
+            //   loading={activeInactivePending || deleteUserPending}
+          />
+        )}
       </StyBody>
     </StyContainer>
   );

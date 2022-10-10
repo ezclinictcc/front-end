@@ -92,6 +92,7 @@ export const EZClinikNewUser: React.FC<{}> = () => {
     getSchema()
       .validate(data, { abortEarly: false })
       .then(() => {
+        console.log("paciente@teste.com");
         if (userType !== "empty") {
           data.idUserType =
             userTypeResponse[userType.toString().toUpperCase().trim()].id;

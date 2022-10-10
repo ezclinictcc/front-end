@@ -102,4 +102,12 @@ export const StyInputWrapper = styled.div`
     & > div:last-of-type {
     margin-bottom: 30px;
   }
-`
+`;
+
+export const StySpinnerContent = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
