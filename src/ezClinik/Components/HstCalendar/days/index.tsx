@@ -51,7 +51,6 @@ export const Days: React.FC<Props> = ({
   let formattedDate: string = "";
 
   function onDateClick(day: Date) {
-    console.log("day: ", day);
     let formatDate: any = "";
     if (idiom === "EN") {
       formatDate = format(day, "MM'/'dd'/'yyyy");

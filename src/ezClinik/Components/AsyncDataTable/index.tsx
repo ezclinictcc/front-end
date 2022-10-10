@@ -97,16 +97,16 @@ const AsyncDataTable: React.FC<IProps> = ({
   });
 
   useEffect(() => {
-    request(paramsFilter);
+    paramsFilter && request(paramsFilter);
   }, [paramsFilter]);
 
   useEffect(() => {
-    request();
+    paramsFilter && request();
   }, [promiseFn]);
 
   useEffect(() => {
     if (!reloadTable) {
-      request();
+      paramsFilter && request();
     }
   }, [reloadTable]);
 

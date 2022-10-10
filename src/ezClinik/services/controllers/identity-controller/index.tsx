@@ -36,6 +36,15 @@ const endpoints = {
 
 //----------------USER----------------//
 
+export function getUsersDataLogin(value?: string) {
+  return fetch({
+    method: IHttpMethod.GET,
+    path: endpoints.user,
+    params: value ? { id: value } : null,
+    service: ServicesURL.IDENTITY,
+  });
+}
+
 export function getUsersData(value?: string) {
   return fetch({
     method: IHttpMethod.GET,
@@ -66,7 +75,8 @@ export function updateUser(user: IUser) {
 export function deleteUser(userId: string) {
   return fetch({
     method: IHttpMethod.DELETE,
-    path: `${endpoints.user}/${userId}`,
+    path: endpoints.user,
+    params: { id: userId },
     service: ServicesURL.IDENTITY,
   });
 }

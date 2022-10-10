@@ -43,7 +43,6 @@ export const EZClinikRegisterProfessionals: React.FC<{}> = () => {
   const { fetch: insertUserRequest, pending: insertUserLoad } = useAsync({
     promiseFn: insertUser,
     onData: (data) => {
-      console.log("data: ", data);
       fireToast({
         criticy: CriticyType.success,
         message: "Usuário criado com sucesso.",
@@ -61,7 +60,6 @@ export const EZClinikRegisterProfessionals: React.FC<{}> = () => {
   const { fetch: getClinic, pending: getClinicLoad } = useAsync({
     promiseFn: getClinicData,
     onData: (data) => {
-      console.log("data: ", data);
       setClinicId(String(data[0].id));
     },
     onError: (_error: any) => {

@@ -51,7 +51,6 @@ export const EZClinikNewUser: React.FC<{}> = () => {
   const { fetch: insertUserRequest, pending: insertUserLoad } = useAsync({
     promiseFn: insertUser,
     onData: (data) => {
-      console.log("data: ", data);
       fireToast({
         criticy: CriticyType.success,
         message: "Usuário criado com sucesso.",
@@ -92,7 +91,6 @@ export const EZClinikNewUser: React.FC<{}> = () => {
     getSchema()
       .validate(data, { abortEarly: false })
       .then(() => {
-        console.log("paciente@teste.com");
         if (userType !== "empty") {
           data.idUserType =
             userTypeResponse[userType.toString().toUpperCase().trim()].id;

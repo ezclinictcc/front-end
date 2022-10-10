@@ -76,3 +76,22 @@ export const StyFilters = styled.div`
   align-items: flex-end;
   padding-bottom: 30px;
 `;
+
+export const StyButtons = styled.div`
+    display: flex;
+`
+
+export const StySeparatorLine = styled.div`
+    margin: 0px 10px;
+    background: #000;
+    width: 1px;
+    height: 40px;
+`
+
+export const StySpinnerContent = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

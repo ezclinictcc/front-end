@@ -50,7 +50,6 @@ export const EZClinikForgotPassword: React.FC<{}> = () => {
       .validate(data, { abortEarly: false })
       .then(() => {
         formRef.current?.setErrors({});
-        console.log("data: ", data);
         setShowCodeNumbers(true);
       })
       .catch((err: any) => {

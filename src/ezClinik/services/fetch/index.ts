@@ -18,7 +18,7 @@ const fetch = ({
   return new Promise(async (resolve, reject) => {
     const loggedSession = sessionStorage.getItem('persist:root');
     const tokenSplit = loggedSession && JSON.parse(JSON.parse(loggedSession).loggedUser);
-    console.log('tokenSplit: ', tokenSplit.token);
+
     if (!service) throw Error("url.not.found");
     axios({
       headers: {
@@ -48,12 +48,9 @@ const fetch = ({
  */
 
 function getURl(service: string) {
-  console.log('cai aqui: ', service)
   const baseURLS: string[] = getBaseURL().split("|") || [];
-  console.log('baseURLS: ', baseURLS);
   const baseURL: string[] =
     baseURLS?.filter((url) => url.includes(service)) || [];
-    console.log('baseURL: ', baseURL);
   if (!baseURL[0]) {
     throw Error("url.not.found");
   }

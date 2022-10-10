@@ -1,12 +1,13 @@
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FillButton } from "../../../Components/Buttons/FillButton";
 import InputSoft from "../../../Components/InputSoft";
 import Text from "../../../Components/Text";
 import useAsync from "../../../hooks/useAsync";
 import {
+  getClinicData,
   insertClinic,
   insertUser,
 } from "../../../services/controllers/identity-controller";
@@ -55,6 +56,26 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
       });
     },
   });
+
+  const { fetch: getClinicRequest, pending: getClinicLoad } = useAsync({
+    promiseFn: getClinicData,
+    onData: (data) => {
+      // fireToast({
+      //   criticy: CriticyType.success,
+      //   message: "Usuário criado com sucesso.",
+      // });
+    },
+    onError: (_error: any) => {
+      // fireToast({
+      //   criticy: CriticyType.error,
+      //   message: "Erro ao criar o usuário.",
+      // });
+    },
+  });
+
+  useEffect(() => {
+    getClinicRequest(loggedUser.id);
+  }, [loggedUser]);
 
   function getSchema() {
     return yup.object().shape({

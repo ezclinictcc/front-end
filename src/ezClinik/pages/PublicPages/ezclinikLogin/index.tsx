@@ -1,7 +1,7 @@
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
 import * as yup from "yup";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   StyButtonsContent,
@@ -29,6 +29,11 @@ import { Spinner } from "../../../Components/Spinner";
 import { Sizes } from "../../../ts/enum/componentSize";
 import { useDispatch } from "react-redux";
 import { userLogIn } from "../../../store/redux/user/userSlice";
+import jwt_decode from "jwt-decode";
+import {
+  getUsersData,
+  getUsersDataLogin,
+} from "../../../services/controllers/identity-controller";
 
 /**
  * @description Home Page.
@@ -40,19 +45,55 @@ export const EZClinikLogin: React.FC<{}> = () => {
 
   const { fireToast }: any = useContext(ToastContext);
   const formRef = useRef<FormHandles & HTMLFormElement>(null);
+  const [userLogged, setUserLoggeed] = useState<any>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { fetch: goGetUserAfterLogin, pending: goGetUserAfterLoginLoad } =
+    useAsync({
+      promiseFn: getUsersDataLogin,
+      onData: (data) => {
+        if (userLogged && data?.length === 1) {
+          dispatch(
+            userLogIn({
+              id: userLogged.id,
+              token: userLogged.token,
+              email: data[0].email,
+              idUser: data[0].id,
+              idProfile: data[0].idProfile,
+              idUserType: data[0].idUserType,
+              name: data[0].name,
+            })
+          );
+          fireToast({
+            criticy: CriticyType.success,
+            message: "Login Realizado com Sucesso.",
+          });
+          setHasTransition(true);
+          setNavigateTo("./home");
+        } else {
+          fireToast({
+            criticy: CriticyType.error,
+            message: "Usuário ou senha incorretas.",
+          });
+        }
+      },
+      onError: (_error: any) => {
+        fireToast({
+          criticy: CriticyType.error,
+          message: "Erro ao realizar login.",
+        });
+      },
+    });
 
   const { fetch: doLogin, pending: doLoginLoad } = useAsync({
     promiseFn: createLogin,
     onData: (data) => {
-      dispatch(userLogIn(data));
-      fireToast({
-        criticy: CriticyType.success,
-        message: "Login Realizado com Sucesso.",
-      });
-      setHasTransition(true);
-      setNavigateTo("./home");
+      setUserLoggeed(data);
+      const userTokenDecode: any = jwt_decode(data.token);
+      if (userTokenDecode.idUser) {
+        goGetUserAfterLogin(userTokenDecode.idUser);
+      }
     },
     onError: (_error: any) => {
       fireToast({
@@ -98,7 +139,7 @@ export const EZClinikLogin: React.FC<{}> = () => {
           <StyPageName>
             <span>Login</span>
           </StyPageName>
-          {!doLoginLoad && (
+          {!doLoginLoad && !goGetUserAfterLoginLoad && (
             <Form
               style={{ height: "100%", width: "80%" }}
               onSubmit={handleSubmit}
@@ -153,7 +194,7 @@ export const EZClinikLogin: React.FC<{}> = () => {
               </StyButtonsContent>
             </Form>
           )}
-          {doLoginLoad && (
+          {(doLoginLoad || goGetUserAfterLoginLoad) && (
             <StySpinnerContent>
               <Spinner size={Sizes.xl} />
             </StySpinnerContent>

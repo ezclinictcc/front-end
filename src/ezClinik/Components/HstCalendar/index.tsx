@@ -90,8 +90,6 @@ const HstCalendar: React.FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [initialValueSetted, setInitialValueSetted] = useState<boolean>(false);
 
-  console.log("selectedDate: ", selectedDate);
-
   /**
    * @description Set the initial value.
    */

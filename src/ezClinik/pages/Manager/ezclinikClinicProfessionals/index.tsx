@@ -7,6 +7,7 @@ import InputSoft from "../../../Components/InputSoft";
 import Text from "../../../Components/Text";
 import useAsync from "../../../hooks/useAsync";
 import {
+  deleteUser,
   getClinicData,
   getUsersData,
   insertUser,
@@ -17,6 +18,7 @@ import { CriticyType } from "../../../ts/enum/criticyType";
 import currentTimeSalutation from "../../../utils/getCurrentTime";
 import {
   StyBody,
+  StyButtons,
   StyButtonSubmit,
   StyCentralize,
   StyContainer,
@@ -24,6 +26,8 @@ import {
   StyHeader,
   StyInfoAccess,
   StyInfoAddress,
+  StySeparatorLine,
+  StySpinnerContent,
   StyTitle,
 } from "./styles";
 import * as yup from "yup";
@@ -33,6 +37,9 @@ import NoFillButton from "../../../Components/Buttons/NoFillButton";
 import SimpleInput from "../../../Components/SimpleInput";
 import { useSelector } from "react-redux";
 import { selectLoggedUser } from "../../../store/redux/user/userSlice";
+import EditIcon from "../../../assets/icons/EditIcon";
+import TrashIcon from "../../../assets/icons/TrashIcon";
+import { Spinner } from "../../../Components/Spinner";
 
 /**
  * @description Home Page.
@@ -45,11 +52,11 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
   const formRef = useRef<FormHandles & HTMLFormElement>(null);
   const [emailFilter, setEmailFilter] = useState<string>("");
   const [clinicId, setClinicId] = useState<string>("");
+  const [selectedUsersId, setSelectedUsersId] = useState<string[]>([]);
 
   const { fetch: insertUserRequest, pending: insertUserLoad } = useAsync({
     promiseFn: insertUser,
     onData: (data) => {
-      console.log("data: ", data);
       fireToast({
         criticy: CriticyType.success,
         message: "Usuário criado com sucesso.",
@@ -64,10 +71,25 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
     },
   });
 
+  const { fetch: delelteUserRequest, pending: delelteUserLoad } = useAsync({
+    promiseFn: deleteUser,
+    onData: (_data) => {
+      fireToast({
+        criticy: CriticyType.success,
+        message: "Profissional excluído com sucesso.",
+      });
+    },
+    onError: (_error: any) => {
+      fireToast({
+        criticy: CriticyType.error,
+        message: "Erro ao excluir o profissional.",
+      });
+    },
+  });
+
   const { fetch: getClinic, pending: getClinicLoad } = useAsync({
     promiseFn: getClinicData,
     onData: (data) => {
-      console.log("data: ", data);
       setClinicId(String(data[0].id));
     },
     onError: (_error: any) => {
@@ -123,6 +145,40 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
       });
   }
 
+  function buttonsActions() {
+    return (
+      <StyButtons>
+        {selectedUsersId.length === 1 && (
+          <>
+            <FillButton
+              id="update-user-id"
+              title="Editar"
+              width="150px"
+              height="40px"
+              // action={() => navigate(`/user/update/${selectedUsersId[0]}`)}
+              icon={<EditIcon fill="#fff" />}
+            />
+            <StySeparatorLine />
+            <NoFillButton
+              id="delete-user-id"
+              title="Excluir"
+              width="150px"
+              height="40px"
+              action={() => {
+                delelteUserRequest(selectedUsersId[0]);
+                // setOpenModalConfirm(true);
+                // setActionName("delete");
+              }}
+              icon={<TrashIcon fill="rgb(0,185,156)" />}
+              borderColor="rgb(0,185,156)"
+              color="rgb(0,185,156)"
+            />
+          </>
+        )}
+      </StyButtons>
+    );
+  }
+
   return (
     <StyContainer>
       <StyHeader>
@@ -154,7 +210,7 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
             promiseFn={getUsersData}
             //   onChange={(user: any) => handleSelectedUsers(user)}
             //   onRowClick={(userData: any) => openModalByUserId(userData)}
-            //   onChangeId={(usersId: any) => setSelectedUsersId(usersId)}
+            onChangeId={(usersId: any) => setSelectedUsersId(usersId)}
             headers={["Nome", "E-mail"]}
             columns={["name", "email"]}
             customWidth={["3%", "47%", "50%"]}
@@ -181,10 +237,15 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
               orderName: "name",
               orderGrowing: true,
             }}
-            //buttonsActions={buttonsActions}
-            //   reloadTable={activeInactivePending || deleteUserPending}
-            //   loading={activeInactivePending || deleteUserPending}
+            buttonsActions={buttonsActions}
+            reloadTable={!delelteUserLoad}
+            loading={delelteUserLoad}
           />
+        )}
+        {!clinicId && (
+          <StySpinnerContent>
+            <Spinner size={Sizes.xl} />
+          </StySpinnerContent>
         )}
       </StyBody>
     </StyContainer>
