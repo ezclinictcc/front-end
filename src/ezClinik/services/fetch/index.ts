@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getBaseURL } from "../propertiesAccess";
-import loggedUser from '../../../../.history/src/ezClinik/utils/loggedUser/index_20221009192938';
 
 /**
  * @description makes http request according to the informed data.
