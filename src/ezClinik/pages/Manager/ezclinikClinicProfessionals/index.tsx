@@ -9,7 +9,7 @@ import useAsync from "../../../hooks/useAsync";
 import {
   deleteUser,
   getClinicData,
-  getUsersData,
+  getUsersDataByIdClinic,
   insertUser,
 } from "../../../services/controllers/identity-controller";
 import { ToastContext } from "../../../store/toast";
@@ -88,6 +88,13 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
     },
   });
 
+  function handleNotImplemented() {
+    fireToast({
+      criticy: CriticyType.info,
+      message: "Functionalidade ainda não implementada.",
+    });
+  }
+
   useEffect(() => {
     getClinic(loggedUser.tokenDecode.idUser);
   }, []);
@@ -102,7 +109,9 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
               title="Editar"
               width="150px"
               height="40px"
-              // action={() => navigate(`/user/update/${selectedUsersId[0]}`)}
+              action={() =>
+                navigate(`/clinic-professionals/update/${selectedUsersId[0]}`)
+              }
               icon={<EditIcon fill="#fff" />}
             />
             <StySeparatorLine />
@@ -142,7 +151,7 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
                 title="Pesquisar"
                 placeholder="E-mail do Profissional"
                 width="350px"
-                handleChange={(dataValue: string) => setEmailFilter(dataValue)}
+                handleChange={(dataValue: string) => handleNotImplemented()}
               />
               <NoFillButton
                 id="add-user-id"
@@ -155,7 +164,7 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
               />
             </StyFilters>
             <AsyncDataTable
-              promiseFn={getUsersData}
+              promiseFn={getUsersDataByIdClinic}
               //   onChange={(user: any) => handleSelectedUsers(user)}
               //   onRowClick={(userData: any) => openModalByUserId(userData)}
               onChangeId={(usersId: any) => setSelectedUsersId(usersId)}

@@ -12,7 +12,11 @@ import {
   StyTimerContainer,
 } from "./styles";
 
-const RangeDate: React.FC<{}> = ({}) => {
+interface IProps {
+  onChange?: Function;
+}
+
+const RangeDate: React.FC<IProps> = ({ onChange = () => null }) => {
   const [selectRange, setSelectRange] = useState<any[]>(interval1hora);
   const [selectedTimer, setSelectedTimer] = useState<any[]>([]);
 
@@ -75,7 +79,14 @@ const RangeDate: React.FC<{}> = ({}) => {
         </StyTimerContainer>
       </StyConfirm>
       <StyButtonConfirm>
-        <FillButton id="login" type="button" width="150px" title="Confirmar" />
+        <FillButton
+          id="login"
+          type="button"
+          width="150px"
+          height="40px"
+          title="Confirmar"
+          action={() => onChange()}
+        />
       </StyButtonConfirm>
     </StyContainer>
   );

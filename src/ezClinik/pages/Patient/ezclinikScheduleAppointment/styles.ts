@@ -26,3 +26,17 @@ export const StyBody = styled.div`
 width: 100%;
   height: 100%;
 `;
+
+export const StyFilters = styled.div`
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 30px;
+
+  & > div:last-of-type {
+    margin-left: 50px;
+  }
+`;
+
+export const StyButtons = styled.div`
+    display: flex;
+`

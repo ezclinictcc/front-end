@@ -135,6 +135,7 @@ export const StyCheckBoxAll = styled.th`
   height: 50px;
   border-bottom: 1px solid rgba(165, 165, 165);
   cursor: pointer;
+  min-width: 45px;
 `;
 
 export const StyCheckBox = styled.div`

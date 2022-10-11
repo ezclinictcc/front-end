@@ -29,10 +29,7 @@ import getValidationErros from "../../../utils/validateErrors";
 import { CriticyType } from "../../../ts/enum/criticyType";
 import { ToastContext } from "../../../store/toast";
 import useAsync from "../../../hooks/useAsync";
-import {
-  getUsersData,
-  insertUser,
-} from "../../../services/controllers/identity-controller/index";
+import { insertUser } from "../../../services/controllers/identity-controller/index";
 import { Spinner } from "../../../Components/Spinner";
 import { profileResponse } from "../../../utils/profileResponse";
 import { userTypeResponse } from "../../../utils/userTypeResponse";

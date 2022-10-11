@@ -27,6 +27,7 @@ interface IProps {
   paramsFilter?: string;
   disableKey?: string;
   disableKeyValue?: string;
+  filterByParams?: boolean;
 }
 
 /**
@@ -59,6 +60,7 @@ const AsyncDataTable: React.FC<IProps> = ({
   paramsFilter,
   disableKey,
   disableKeyValue,
+  filterByParams = true,
 }) => {
   const { fireToast }: any = useContext(ToastContext);
   const [data, setData] = useState<any[]>([]);
@@ -109,6 +111,12 @@ const AsyncDataTable: React.FC<IProps> = ({
       paramsFilter && request(paramsFilter);
     }
   }, [reloadTable]);
+
+  useEffect(() => {
+    if (filterByParams === false && !paramsFilter) {
+      request();
+    }
+  }, []);
 
   function handleOrdenate(headerName: string) {
     setOrderDataValue({

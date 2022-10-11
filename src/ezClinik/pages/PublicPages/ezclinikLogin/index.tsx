@@ -30,10 +30,7 @@ import { Sizes } from "../../../ts/enum/componentSize";
 import { useDispatch } from "react-redux";
 import { userLogIn } from "../../../store/redux/user/userSlice";
 import jwt_decode from "jwt-decode";
-import {
-  getUsersData,
-  getUsersDataLogin,
-} from "../../../services/controllers/identity-controller";
+import { getUsersDataById } from "../../../services/controllers/identity-controller";
 
 /**
  * @description Home Page.
@@ -51,7 +48,7 @@ export const EZClinikLogin: React.FC<{}> = () => {
 
   const { fetch: goGetUserAfterLogin, pending: goGetUserAfterLoginLoad } =
     useAsync({
-      promiseFn: getUsersDataLogin,
+      promiseFn: getUsersDataById,
       onData: (data) => {
         if (userLogged && data?.length === 1) {
           setActionFunction({

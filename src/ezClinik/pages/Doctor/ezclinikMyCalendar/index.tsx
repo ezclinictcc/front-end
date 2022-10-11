@@ -1,8 +1,10 @@
 import { Form } from "@unform/web";
-import React from "react";
+import React, { useContext } from "react";
 import HstCalendar from "../../../Components/HstCalendar";
 import RangeDate from "../../../Components/RangeDate";
 import Text from "../../../Components/Text";
+import { ToastContext } from "../../../store/toast";
+import { CriticyType } from "../../../ts/enum/criticyType";
 import { StyBody, StyContainer, StyHeader, StyTitle } from "./styles";
 
 /**
@@ -10,6 +12,15 @@ import { StyBody, StyContainer, StyHeader, StyTitle } from "./styles";
  * @returns EZClinik Home.
  */
 export const EZClinikMyCalendar: React.FC<{}> = () => {
+  const { fireToast }: any = useContext(ToastContext);
+
+  function handleChange() {
+    fireToast({
+      criticy: CriticyType.info,
+      message: "Functionalidade ainda não implementada.",
+    });
+  }
+
   return (
     <>
       <StyContainer>
@@ -32,7 +43,7 @@ export const EZClinikMyCalendar: React.FC<{}> = () => {
               <HstCalendar id="calendarDate" name="calendarDate" />
             </div>
             <div style={{ width: "30%" }}>
-              <RangeDate />
+              <RangeDate onChange={() => handleChange()} />
             </div>
           </Form>
         </StyBody>

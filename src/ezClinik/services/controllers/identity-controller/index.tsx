@@ -36,7 +36,16 @@ const endpoints = {
 
 //----------------USER----------------//
 
-export function getUsersDataLogin(value?: string) {
+export function getUsersDataByIdAndClinic({ idUser, idClinic }: any) {
+  return fetch({
+    method: IHttpMethod.GET,
+    path: endpoints.user,
+    params: { id: idUser, idClinic: idClinic },
+    service: ServicesURL.IDENTITY,
+  });
+}
+
+export function getUsersDataById(value?: string) {
   return fetch({
     method: IHttpMethod.GET,
     path: endpoints.user,
@@ -45,7 +54,7 @@ export function getUsersDataLogin(value?: string) {
   });
 }
 
-export function getUsersData(value?: string) {
+export function getUsersDataByIdClinic(value?: string) {
   return fetch({
     method: IHttpMethod.GET,
     path: endpoints.user,
@@ -82,6 +91,14 @@ export function deleteUser(userId: string) {
 }
 
 //----------------CLINIC----------------//
+
+export function getAllClinicData() {
+  return fetch({
+    method: IHttpMethod.GET,
+    path: endpoints.clinic,
+    service: ServicesURL.IDENTITY,
+  });
+}
 
 export function getClinicData(value?: string) {
   return fetch({

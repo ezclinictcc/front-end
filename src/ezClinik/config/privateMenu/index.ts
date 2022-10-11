@@ -13,6 +13,7 @@ import EZClinikRegisterProfessionals from '../../pages/Manager/ezclinikRegisterP
 import EZClinikMedicalConsultationHistory from '../../pages/Manager/ezclinikMedicalConsultationHistory';
 import EZClinikMyClinic from '../../pages/Manager/ezclinikMyClinic';
 import EZClinikClinicProfessionals from '../../pages/Manager/ezclinikClinicProfessionals';
+import EZClinikUpdateProfessionals from '../../pages/Manager/ezclinikUpdateProfessionals';
 
 /**
  * @description Menu System.
@@ -94,6 +95,16 @@ export const PrivateRouteNavigator = [
         name: 'Cadastrar Profissionais',
         path: '/clinic-professionals/new',
         component: EZClinikRegisterProfessionals,
+        currentPage: false,
+        template: AppTemplate,
+        menuAccess: false,
+        isPrivate: true,
+        role: ["MANAGER"],
+    },
+    {
+        name: 'Cadastrar Profissionais',
+        path: '/clinic-professionals/update/:id',
+        component: EZClinikUpdateProfessionals,
         currentPage: false,
         template: AppTemplate,
         menuAccess: false,
