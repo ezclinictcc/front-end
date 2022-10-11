@@ -48,6 +48,10 @@ export const StyButtonSubmit = styled.div`
   margin-top: 15px;
   padding-top: 30px;
   border-top: 1px solid #000;
+
+  & >button:first-of-type {
+    margin-right: 20px;
+  }
 `;
 
 export const StyInfoAccess = styled.div`

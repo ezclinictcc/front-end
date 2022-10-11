@@ -28,6 +28,7 @@ import * as yup from "yup";
 import getValidationErros from "../../../utils/validateErrors";
 import { useSelector } from "react-redux";
 import { selectLoggedUser } from "../../../store/redux/user/userSlice";
+import NoFillButton from "../../../Components/Buttons/NoFillButton";
 
 /**
  * @description Home Page.
@@ -231,10 +232,20 @@ export const EZClinikRegisterProfessionals: React.FC<{}> = () => {
             </StyInfoAddress>
           </div>
           <StyButtonSubmit>
+            <NoFillButton
+              id="delete-user-id"
+              title="Cancelar"
+              width="150px"
+              height="40px"
+              action={() => navigate("/clinic-professionals")}
+              borderColor="rgb(0,185,156)"
+              color="rgb(0,185,156)"
+            />
             <FillButton
               id="login"
               type="submit"
               width="150px"
+              height="40px"
               title="Cadastrar"
             />
           </StyButtonSubmit>
