@@ -22,6 +22,7 @@ export const StyUserInfo = styled.div`
   justify-content: center;
   align-items: center;
   padding: 15px;
+  margin-right: 15px;
 
   button {
     background: transparent;

@@ -26,6 +26,7 @@ import {
   StyHeader,
   StyInfoAccess,
   StyInfoAddress,
+  StyNoData,
   StySeparatorLine,
   StySpinnerContent,
   StyTitle,
@@ -40,6 +41,7 @@ import { selectLoggedUser } from "../../../store/redux/user/userSlice";
 import EditIcon from "../../../assets/icons/EditIcon";
 import TrashIcon from "../../../assets/icons/TrashIcon";
 import { Spinner } from "../../../Components/Spinner";
+import EmptyInfo from "../../../Components/EmptyInfo";
 
 /**
  * @description Home Page.
@@ -53,23 +55,6 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
   const [emailFilter, setEmailFilter] = useState<string>("");
   const [clinicId, setClinicId] = useState<string>("");
   const [selectedUsersId, setSelectedUsersId] = useState<string[]>([]);
-
-  const { fetch: insertUserRequest, pending: insertUserLoad } = useAsync({
-    promiseFn: insertUser,
-    onData: (data) => {
-      fireToast({
-        criticy: CriticyType.success,
-        message: "Usuário criado com sucesso.",
-      });
-      navigate("/login");
-    },
-    onError: (_error: any) => {
-      fireToast({
-        criticy: CriticyType.error,
-        message: "Erro ao criar o usuário.",
-      });
-    },
-  });
 
   const { fetch: delelteUserRequest, pending: delelteUserLoad } = useAsync({
     promiseFn: deleteUser,
@@ -90,7 +75,9 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
   const { fetch: getClinic, pending: getClinicLoad } = useAsync({
     promiseFn: getClinicData,
     onData: (data) => {
-      setClinicId(String(data[0].id));
+      if (data.length === 1) {
+        setClinicId(String(data[0].id));
+      }
     },
     onError: (_error: any) => {
       fireToast({
@@ -104,46 +91,6 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
   useEffect(() => {
     getClinic(loggedUser.tokenDecode.idUser);
   }, []);
-
-  function getSchema() {
-    return yup.object().shape({
-      name: yup.string().required("Digite seu Nome"),
-      email: yup
-        .string()
-        .email("Digite um E-mail Válido")
-        .required("Digite o E-mail de Acesso"),
-      password: yup.string().required("Digite a Senha de Acesso"),
-      country: yup.string().required("Digite o nome do País"),
-      state: yup.string().required("Digite o nome do Estado"),
-      city: yup.string().required("Digite o nome da Cidade"),
-      district: yup.string().required("Digite o Complemento"),
-      number: yup.string().required("Digite o número"),
-      cep: yup.string().required("Digite o CEP"),
-    });
-  }
-
-  async function handleSubmit(data: any) {
-    getSchema()
-      .validate(data, { abortEarly: false })
-      .then(() => {
-        data.idUserType = "65475e6a-1ad2-433a-967e-ad6b230c0557";
-        data.idProfile = "40c617cf-a41a-45e0-a855-bada1773217f";
-
-        data.number = Number(data.number);
-        insertUserRequest();
-        formRef.current?.setErrors({});
-      })
-      .catch((err: any) => {
-        if (err instanceof yup.ValidationError) {
-          const errors = getValidationErros(err);
-          formRef.current?.setErrors(errors);
-          fireToast({
-            criticy: CriticyType.error,
-            message: "Digite as informações solicitadas.",
-          });
-        }
-      });
-  }
 
   function buttonsActions() {
     return (
@@ -187,7 +134,7 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
         </StyTitle>
       </StyHeader>
       <StyBody>
-        {clinicId && (
+        {clinicId && !getClinicLoad && (
           <>
             <StyFilters>
               <SimpleInput
@@ -244,7 +191,27 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
             />
           </>
         )}
-        {!clinicId && (
+        {!getClinicLoad && !clinicId && (
+          <EmptyInfo>
+            <StyNoData>
+              <Text
+                size="20px"
+                fontWeight="600"
+                value="Você ainda não criou a sua clínica"
+              />
+              <NoFillButton
+                id="add-clinic-id"
+                title="Clique para criar"
+                action={() => navigate("/my-clinic")}
+                width="180px"
+                height="40px"
+                borderColor="rgb(0,185,156)"
+                color="rgb(0,185,156)"
+              />
+            </StyNoData>
+          </EmptyInfo>
+        )}
+        {getClinicLoad && (
           <StySpinnerContent>
             <Spinner size={Sizes.xl} />
           </StySpinnerContent>

@@ -48,8 +48,8 @@ export const EZClinikNextAppointments: React.FC<{}> = () => {
           >
             <div style={{ width: "70%", marginRight: "50px" }}>
               <HstCalendar
-                id="teste"
-                name="teste"
+                id="calendar-id"
+                name="calendar-id"
                 onChange={(date: Date) => handleChange(date.toString())}
               />
             </div>

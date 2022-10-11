@@ -10,6 +10,7 @@ import {
 
 interface IProps {
   size: Sizes;
+  color?: string;
 }
 
 const getFontBySize = (size: keyof typeof Sizes): number =>
@@ -27,7 +28,7 @@ const getFontBySize = (size: keyof typeof Sizes): number =>
  * @description CircleSpinner Component.
  * @param {number} size Spinner size.
  */
-export const CircleSpinner: React.FC<IProps> = ({ size }) => {
+export const CircleSpinner: React.FC<IProps> = ({ size, color }) => {
   return <StyContainer size={getFontBySize(size)} />;
 };
 
@@ -50,11 +51,11 @@ export const PageCircleSpinner: React.FC<IProps> = ({ size }) => {
  * @description PageCircleSpinner Component.
  * @param {number} size Spinner size.
  */
-export const Spinner: React.FC<IProps> = ({ size }) => {
+export const Spinner: React.FC<IProps> = ({ size, color }) => {
   return (
     <StyPageWrapperContainer size={getFontBySize(size)}>
-      <StyOneSpinContainer size={getFontBySize(size)} />
-      <StyTwoSpinContainer size={getFontBySize(size)} />
+      <StyOneSpinContainer size={getFontBySize(size)} color={color} />
+      <StyTwoSpinContainer size={getFontBySize(size)} color={color} />
     </StyPageWrapperContainer>
   );
 };

@@ -23,7 +23,10 @@ export const StyTitle = styled.div`
 `
 
 export const StyBody = styled.div`
-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
   height: 100%;
 `;
 
@@ -95,4 +98,14 @@ export const StySpinnerContent = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 150px;
+`;
+
+export const StyNoData = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  & > button {
+    margin-top: 30px;
+  }
 `;

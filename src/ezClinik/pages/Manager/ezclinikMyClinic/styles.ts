@@ -69,3 +69,12 @@ export const StyInfoAddress = styled.div`
     width: 50%;
   }
 `;
+
+export const StySpinnerContent = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 150px;
+`;

@@ -24,6 +24,7 @@ import {
   StyHeader,
   StyInfoAccess,
   StyInfoAddress,
+  StySpinnerContent,
   StyTitle,
 } from "./styles";
 import * as yup from "yup";
@@ -32,6 +33,7 @@ import SelectBox from "../../../Components/SelectBox";
 import { clinicSpeciality } from "../../../utils/clinicSpeciality";
 import { selectLoggedUser } from "../../../store/redux/user/userSlice";
 import { useSelector } from "react-redux";
+import { Spinner } from "../../../Components/Spinner";
 
 /**
  * @description Home Page.
@@ -78,11 +80,11 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
   const { fetch: getClinicRequest, pending: getClinicLoad } = useAsync({
     promiseFn: getClinicData,
     onData: (data) => {
-      if (data) {
+      if (data?.length === 1) {
         const clinicSpecialitySplit = data[0]?.clinicSpecialty.split(";");
         const initialValeuSpeciality: any = [];
         clinicSpeciality.forEach((speciality: any) => {
-          if (clinicSpecialitySplit.includes(speciality.value)) {
+          if (clinicSpecialitySplit?.includes(speciality.value)) {
             initialValeuSpeciality.push(speciality);
           }
         });
@@ -99,22 +101,9 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
           cep: data[0].cep,
         });
       }
-      // fireToast({
-      //   criticy: CriticyType.success,
-      //   message: "Usuário criado com sucesso.",
-      // });
     },
-    onError: (_error: any) => {
-      // fireToast({
-      //   criticy: CriticyType.error,
-      //   message: "Erro ao criar o usuário.",
-      // });
-    },
+    onError: (_error: any) => {},
   });
-
-  useEffect(() => {
-    getClinicRequest(loggedUser.tokenDecode.idUser);
-  }, [loggedUser]);
 
   function getSchema() {
     return yup.object().shape({
@@ -137,7 +126,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
       .then(() => {
         data.number = Number(data.number);
         data.idUser = loggedUser.tokenDecode.idUser;
-        if (clinicInitialData.id) {
+        if (clinicInitialData?.id) {
           data.id = clinicInitialData.id;
           updateClinicRequest(data);
         } else {
@@ -157,6 +146,10 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
       });
   }
 
+  useEffect(() => {
+    getClinicRequest(loggedUser.tokenDecode.idUser);
+  }, [loggedUser, !insertUserLoad, !updateUserLoad]);
+
   return (
     <StyContainer>
       <StyHeader>
@@ -165,116 +158,127 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
         </StyTitle>
       </StyHeader>
       <StyBody>
-        <Form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          style={{
-            display: insertUserLoad ? "none" : "flex",
-            flexDirection: "column",
-            width: "100%",
-            height: "100%",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", width: "100%", marginBottom: "3%" }}>
-            <StyInfoAccess>
-              <Text size="18px" fontWeight="600" value="Sobre a Clínica" />
-              <StyCentralize>
-                <InputSoft
-                  id="name"
-                  name="name"
-                  formRef={formRef}
-                  width="400px"
-                  label="Nome"
-                  placeholder="Nome do Usuário"
-                  initialValue={clinicInitialData?.name}
+        {!getClinicLoad && !updateUserLoad && !insertUserLoad && (
+          <Form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            style={{
+              display: insertUserLoad ? "none" : "flex",
+              flexDirection: "column",
+              width: "100%",
+              height: "100%",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", width: "100%", marginBottom: "3%" }}>
+              <StyInfoAccess>
+                <Text size="18px" fontWeight="600" value="Sobre a Clínica" />
+                <StyCentralize>
+                  <InputSoft
+                    id="name"
+                    name="name"
+                    formRef={formRef}
+                    width="400px"
+                    label="Nome"
+                    placeholder="Nome do Usuário"
+                    initialValue={clinicInitialData?.name}
+                  />
+                  <SelectBox
+                    id="clinicSpecialty-selectbox"
+                    name="clinicSpecialty"
+                    title="Serviços Disponíveis"
+                    placeHolder="Selecione os Serviços"
+                    dataOptions={clinicSpeciality}
+                    formRef={formRef}
+                    isCheckBox
+                    hasFilter={false}
+                    hasMargin={false}
+                    hasReset
+                    width="400px"
+                    initialValue={clinicInitialData?.formatClinicSpecialty}
+                  />
+                </StyCentralize>
+              </StyInfoAccess>
+              <StyInfoAddress>
+                <Text
+                  size="18px"
+                  fontWeight="600"
+                  value="Endereço da Clínica"
                 />
-                <SelectBox
-                  id="clinicSpecialty-selectbox"
-                  name="clinicSpecialty"
-                  title="Serviços Disponíveis"
-                  placeHolder="Selecione os Serviços"
-                  dataOptions={clinicSpeciality}
-                  formRef={formRef}
-                  isCheckBox
-                  hasFilter={false}
-                  hasMargin={false}
-                  hasReset
-                  width="400px"
-                  initialValue={clinicInitialData?.formatClinicSpecialty}
-                />
-              </StyCentralize>
-            </StyInfoAccess>
-            <StyInfoAddress>
-              <Text size="18px" fontWeight="600" value="Endereço da Clínica" />
-              <div style={{ display: "flex", flexFlow: "wrap" }}>
-                <div style={{ marginRight: "30px" }}>
+                <div style={{ display: "flex", flexFlow: "wrap" }}>
+                  <div style={{ marginRight: "30px" }}>
+                    <StyCentralize>
+                      <InputSoft
+                        id="country"
+                        name="country"
+                        formRef={formRef}
+                        width="350px"
+                        label="País"
+                        initialValue={clinicInitialData?.country}
+                      />
+                      <InputSoft
+                        id="state"
+                        name="state"
+                        formRef={formRef}
+                        width="350px"
+                        label="Estado"
+                        initialValue={clinicInitialData?.state}
+                      />
+                      <InputSoft
+                        id="city"
+                        name="city"
+                        formRef={formRef}
+                        width="350px"
+                        label="Cidade"
+                        initialValue={clinicInitialData?.city}
+                      />
+                    </StyCentralize>
+                  </div>
                   <StyCentralize>
                     <InputSoft
-                      id="country"
-                      name="country"
+                      id="district"
+                      name="district"
                       formRef={formRef}
                       width="350px"
-                      label="País"
-                      initialValue={clinicInitialData?.country}
+                      label="Complemento"
+                      initialValue={clinicInitialData?.district}
                     />
                     <InputSoft
-                      id="state"
-                      name="state"
+                      id="number"
+                      name="number"
                       formRef={formRef}
                       width="350px"
-                      label="Estado"
-                      initialValue={clinicInitialData?.state}
+                      label="Número"
+                      onlyNumbers
+                      initialValue={clinicInitialData?.number}
                     />
                     <InputSoft
-                      id="city"
-                      name="city"
+                      id="cep"
+                      name="cep"
                       formRef={formRef}
                       width="350px"
-                      label="Cidade"
-                      initialValue={clinicInitialData?.city}
+                      label="CEP"
+                      initialValue={clinicInitialData?.cep}
                     />
                   </StyCentralize>
                 </div>
-                <StyCentralize>
-                  <InputSoft
-                    id="district"
-                    name="district"
-                    formRef={formRef}
-                    width="350px"
-                    label="Complemento"
-                    initialValue={clinicInitialData?.district}
-                  />
-                  <InputSoft
-                    id="number"
-                    name="number"
-                    formRef={formRef}
-                    width="350px"
-                    label="Número"
-                    onlyNumbers
-                    initialValue={clinicInitialData?.number}
-                  />
-                  <InputSoft
-                    id="cep"
-                    name="cep"
-                    formRef={formRef}
-                    width="350px"
-                    label="CEP"
-                    initialValue={clinicInitialData?.cep}
-                  />
-                </StyCentralize>
-              </div>
-            </StyInfoAddress>
-          </div>
-          <StyButtonSubmit>
-            <FillButton
-              id="login"
-              type="submit"
-              width="150px"
-              title={clinicInitialData?.id ? "Atualizar" : "Cadastrar"}
-            />
-          </StyButtonSubmit>
-        </Form>
+              </StyInfoAddress>
+            </div>
+            <StyButtonSubmit>
+              <FillButton
+                id="login"
+                type="submit"
+                width="150px"
+                title={clinicInitialData?.id ? "Atualizar" : "Cadastrar"}
+              />
+            </StyButtonSubmit>
+          </Form>
+        )}
+        {(getClinicLoad || updateUserLoad || insertUserLoad) && (
+          <StySpinnerContent>
+            <Spinner size={Sizes.xl} />
+          </StySpinnerContent>
+        )}
       </StyBody>
     </StyContainer>
   );

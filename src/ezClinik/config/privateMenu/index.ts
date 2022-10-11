@@ -112,7 +112,7 @@ export const PrivateRouteNavigator = [
     },
     {
         name: 'Minha Clínica',
-        path: '/my-clinik',
+        path: '/my-clinic',
         component: EZClinikMyClinic,
         currentPage: false,
         template: AppTemplate,

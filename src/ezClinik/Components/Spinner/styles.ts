@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 interface IStyContainerProps {
   readonly size: number;
+  readonly color?: string;
 }
 export const StyContainer = styled.div<IStyContainerProps>`
   width: ${(props) => `${props.size}px`};
@@ -39,8 +40,8 @@ export const StyTwoSpinContainer = styled.div<IStyContainerProps>`
   width: ${(props) => `${props.size}px`};
   height: ${(props) => `${props.size}px`};
   border: 5px solid transparent;
-  border-left-color: rgb(0,185,156);
-  border-right-color: rgb(0,185,156);
+  border-left-color: ${(props) => props.color ? props.color : 'rgb(0,185,156)'};
+  border-right-color: ${(props) => props.color ? props.color : 'rgb(0,185,156)'};
   border-radius: 50%;
   position: absolute;
   animation: spin 1.5s linear infinite;
@@ -56,7 +57,7 @@ export const StyOneSpinContainer = styled.div<IStyContainerProps>`
   width: ${(props) => `${props.size}px`};
   height: ${(props) => `${props.size}px`};
   border: 5px solid transparent;
-  border-top-color: rgb(0,185,156);
+  border-top-color: ${(props) => props.color ? props.color : 'rgb(0,185,156)'};
   position: absolute;
   border-radius: 50%;
   animation: spin 2s linear infinite;

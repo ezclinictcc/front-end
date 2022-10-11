@@ -124,7 +124,7 @@ export const EZClinikLogin: React.FC<{}> = () => {
           formRef.current?.setErrors(errors);
           fireToast({
             criticy: CriticyType.error,
-            message: "Teste Erro",
+            message: "Digite os campos solicitados.",
           });
         }
       });

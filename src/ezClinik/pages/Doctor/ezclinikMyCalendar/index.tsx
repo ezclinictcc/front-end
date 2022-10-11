@@ -29,7 +29,7 @@ export const EZClinikMyCalendar: React.FC<{}> = () => {
             onSubmit={() => null}
           >
             <div style={{ width: "70%", marginRight: "50px" }}>
-              <HstCalendar id="teste" name="teste" />
+              <HstCalendar id="calendarDate" name="calendarDate" />
             </div>
             <div style={{ width: "30%" }}>
               <RangeDate />

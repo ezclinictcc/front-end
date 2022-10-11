@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { menuNavigator } from "../../../config/menu";
 import { PrivateRouteNavigator } from "../../../config/privateMenu";
 import {
   selectIsUserLogged,

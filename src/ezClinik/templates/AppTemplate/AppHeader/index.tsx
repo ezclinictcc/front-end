@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { useDispatch } from "react-redux";
 import LogoutIcon from "../../../assets/icons/LogoutIcon";
 import appLogo from "../../../assets/logo.png";
+import { Spinner } from "../../../Components/Spinner";
 import useAsync from "../../../hooks/useAsync";
 import { doLogout } from "../../../services/controllers/gateway-controllet";
-import { userLogOut } from "../../../store/redux/user/userSlice";
 import { ToastContext } from "../../../store/toast";
 import { TransitionContext } from "../../../store/transitionLogin";
+import { Sizes } from "../../../ts/enum/componentSize";
 import { CriticyType } from "../../../ts/enum/criticyType";
 import { StyContainer, StyLabelText, StyUserInfo } from "./styles";
 
@@ -17,12 +17,11 @@ import { StyContainer, StyLabelText, StyUserInfo } from "./styles";
 export const AppHeader: React.FC<{}> = () => {
   const { setHasTransition, setActionName }: any =
     useContext(TransitionContext);
-  const dispatch = useDispatch();
   const { fireToast }: any = useContext(ToastContext);
 
   const { fetch: doLogoutRequest, pending: doLogoutLoad } = useAsync({
     promiseFn: doLogout,
-    onData: (data) => {
+    onData: (_data) => {
       setHasTransition(true);
       setActionName("logout");
     },
@@ -56,15 +55,20 @@ export const AppHeader: React.FC<{}> = () => {
           />
           <StyLabelText>EZClinik</StyLabelText>
         </div>
-
         <StyUserInfo>
-          <button
-            onClick={() => {
-              doLogoutRequest();
-            }}
-          >
-            <LogoutIcon width={25} height={25} fill="#FFFFFF" />
-          </button>
+          {!doLogoutLoad ? (
+            <button
+              onClick={() => {
+                doLogoutRequest();
+              }}
+            >
+              <LogoutIcon width={25} height={25} fill="#FFFFFF" />
+            </button>
+          ) : (
+            <div style={{ marginRight: "10px" }}>
+              <Spinner size={Sizes.sm} color="#FFFFFF" />
+            </div>
+          )}
         </StyUserInfo>
       </StyContainer>
     </>

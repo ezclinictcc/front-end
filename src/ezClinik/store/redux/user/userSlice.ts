@@ -28,7 +28,7 @@ const initialState: ILoggedUser = {
   isLogged: false,
 };
 
-const userTypeResponseTeste: any = {
+const userTypeResponseIdUserType: any = {
   "4432ffdc-ee48-4678-9ed2-b2b616aa664e": {
     type: "MANAGER",
   },
@@ -54,7 +54,7 @@ export const loggedUserSlice = createSlice({
         idUser: action.payload.id,
         idProfile: action.payload.idProfile,
         idUserType: action.payload.idUserType,
-        naUserType: userTypeResponseTeste[action.payload.idUserType].type,
+        naUserType: userTypeResponseIdUserType[action.payload.idUserType].type,
         name: action.payload.name,
         isLogged: true,
       };

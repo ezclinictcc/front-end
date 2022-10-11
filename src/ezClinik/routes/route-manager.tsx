@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Routes, Route, Outlet, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import RequireAuth from "../Components/RequireAuth";
-import { menuNavigator } from "../config/menu";
 import { PrivateRouteNavigator } from "../config/privateMenu";
 import { PublicRouteNavigator } from "../config/publicMenu";
 import {
@@ -17,8 +15,6 @@ import { verifyCurrentPathName } from "../utils/changeRoute";
 function CdPageRoute() {
   const isUserLogged = useSelector(selectIsUserLogged);
   const loggedUser = useSelector(selectLoggedUser);
-  const pathName = verifyCurrentPathName();
-  const navigate = useNavigate();
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -85,23 +81,6 @@ function CdPageRoute() {
         )}
       </Routes>
     </div>
-    // <div style={{ width: "100%", height: "100%" }}>
-    //   <Routes>
-    //     {menuNavigator.map((path, index) => {
-    //       return (
-    //         <Route key={`${index}-template-auth`} element={<Outlet />}>
-    //           <Route key={`${index}-template-key`} element={<path.template />}>
-    //             <Route
-    //               key={`${index}-component-key`}
-    //               path={path.path}
-    //               element={<path.component />}
-    //             />
-    //           </Route>
-    //         </Route>
-    //       );
-    //     })}
-    //   </Routes>
-    // </div>
   );
 }
 
