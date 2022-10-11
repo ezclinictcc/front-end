@@ -250,7 +250,7 @@ export const Pagination: React.FC<IPagination> = ({
                 id="PageNumber"
                 onClick={() => setState({ ...state, currentPage: 1 })}
               >
-                <Text value={"1"} size={Sizes.lb} />
+                <Text value={"1"} size="16px" />
               </StyPageNumber>
               <StyExistPages id="ExistPages">...</StyExistPages>
             </>
@@ -264,7 +264,7 @@ export const Pagination: React.FC<IPagination> = ({
               onClick={() => setState({ ...state, currentPage: numbers })}
               selected={currentPage == numbers && "selected"}
             >
-              <Text value={numbers.toString()} size={Sizes.lb} />
+              <Text value={numbers.toString()} size="16px" />
             </StyPageNumber>
           ))}
         {pageResult &&
@@ -281,10 +281,7 @@ export const Pagination: React.FC<IPagination> = ({
                   })
                 }
               >
-                <Text
-                  value={pageResult.totalPages.toString()}
-                  size={Sizes.lb}
-                />
+                <Text value={pageResult.totalPages.toString()} size="16px" />
               </StyPageNumber>
             </>
           )}

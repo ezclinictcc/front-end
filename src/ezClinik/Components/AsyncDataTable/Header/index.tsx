@@ -41,12 +41,12 @@ export const HeaderTable: React.FC<IProps> = ({
             {qttRegisters === 1 ? (
               <Text
                 value={`${qttRegisters} ${bundles.qttSearch} ${bundles.registration}`}
-                size={Sizes.xs}
+                size="16px"
               />
             ) : (
               <Text
                 value={`${qttRegisters} ${bundles.qttSearchPlural} ${bundles.registrationPlural}`}
-                size={Sizes.xs}
+                size="16px"
               />
             )}
           </span>
@@ -73,7 +73,7 @@ export const HeaderTable: React.FC<IProps> = ({
             value={`${bundles.showing} ${
               pagination.startIndex === 0 ? 1 : pagination.startIndex
             } ${bundles.of} ${pagination.endIndex}`}
-            size={Sizes.xs}
+            size="16px"
           />
         </div>
       </StyPaginationHeader>

@@ -29,7 +29,7 @@ export const CheckExpandedTable: React.FC<IProps> = ({
     <StyCheckOptionsContainer checkOpen={checkOpen}>
       <StyCheckBoxContainer>
         <CheckboxOnIcon fill="rgb(0,185,156)" />
-        <Text size={Sizes.xs} value={label} />
+        <Text size="16px" value={label} />
       </StyCheckBoxContainer>
       <StyButtonsContainer>{buttonsActions()}</StyButtonsContainer>
     </StyCheckOptionsContainer>

@@ -27,10 +27,9 @@ import useAsync from "../../../hooks/useAsync";
 import { createLogin } from "../../../services/controllers/gateway-controllet";
 import { Spinner } from "../../../Components/Spinner";
 import { Sizes } from "../../../ts/enum/componentSize";
-import { useDispatch } from "react-redux";
-import { userLogIn } from "../../../store/redux/user/userSlice";
 import jwt_decode from "jwt-decode";
 import { getUsersDataById } from "../../../services/controllers/identity-controller";
+import Text from "../../../Components/Text";
 
 /**
  * @description Home Page.
@@ -43,8 +42,8 @@ export const EZClinikLogin: React.FC<{}> = () => {
   const { fireToast }: any = useContext(ToastContext);
   const formRef = useRef<FormHandles & HTMLFormElement>(null);
   const [userLogged, setUserLoggeed] = useState<any>();
+  const [welcomeUser, setWelcomeUser] = useState<string>("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { fetch: goGetUserAfterLogin, pending: goGetUserAfterLoginLoad } =
     useAsync({
@@ -60,6 +59,7 @@ export const EZClinikLogin: React.FC<{}> = () => {
             idUserType: data[0].idUserType,
             name: data[0].name,
           });
+          setWelcomeUser(data[0].name);
           setActionName("login");
           setHasTransition(true);
           fireToast({
@@ -131,68 +131,81 @@ export const EZClinikLogin: React.FC<{}> = () => {
     <>
       <StyContainer>
         <StyWrapper>
-          <StyPageName>
-            <span>Login</span>
-          </StyPageName>
-          {!doLoginLoad && !goGetUserAfterLoginLoad && (
-            <Form
-              style={{ height: "100%", width: "80%" }}
-              onSubmit={handleSubmit}
-              ref={formRef}
-            >
-              <StyInputContent>
-                <StyInputWrapper>
-                  <InputSoft
-                    id="email"
-                    name="email"
-                    formRef={formRef}
-                    width="350px"
-                    label="E-mail"
-                    placeholder="E-mail de Acesso"
-                    inputIcon={<UserAccountIcon fill="rgb(135, 135, 135)" />}
-                  />
-                  <InputSoft
-                    id="password"
-                    name="password"
-                    formRef={formRef}
-                    width="350px"
-                    label="Senha"
-                    hidden
-                    placeholder="Senha de Acesso"
-                    inputIcon={<PadLockIcon fill="rgb(135, 135, 135)" />}
-                  />
-                </StyInputWrapper>
-                <StyButtonWrapper>
-                  <FillButton
-                    id="login"
-                    type="submit"
-                    width="150px"
-                    title="Entrar"
-                  />
+          {!doLoginLoad && !goGetUserAfterLoginLoad && !welcomeUser && (
+            <>
+              <StyPageName>
+                <span>Login</span>
+              </StyPageName>
+              <Form
+                style={{ height: "100%", width: "80%" }}
+                onSubmit={handleSubmit}
+                ref={formRef}
+              >
+                <StyInputContent>
+                  <StyInputWrapper>
+                    <InputSoft
+                      id="email"
+                      name="email"
+                      formRef={formRef}
+                      width="350px"
+                      label="E-mail"
+                      placeholder="E-mail de Acesso"
+                      inputIcon={<UserAccountIcon fill="rgb(135, 135, 135)" />}
+                    />
+                    <InputSoft
+                      id="password"
+                      name="password"
+                      formRef={formRef}
+                      width="350px"
+                      label="Senha"
+                      hidden
+                      placeholder="Senha de Acesso"
+                      inputIcon={<PadLockIcon fill="rgb(135, 135, 135)" />}
+                    />
+                  </StyInputWrapper>
+                  <StyButtonWrapper>
+                    <FillButton
+                      id="login"
+                      type="submit"
+                      width="150px"
+                      title="Entrar"
+                    />
+                    <UnderlineButton
+                      id="forgot-password"
+                      type="button"
+                      action={() => navigate("/forgot-password")}
+                      title="Esqueci minha senha"
+                    />
+                  </StyButtonWrapper>
+                </StyInputContent>
+                <StyLine />
+                <StyButtonsContent>
+                  <span>Novo por aqui? Crie um </span>
                   <UnderlineButton
-                    id="forgot-password"
+                    id="new-user"
                     type="button"
-                    action={() => navigate("/forgot-password")}
-                    title="Esqueci minha senha"
+                    action={() => navigate("/new-user")}
+                    title="Novo Cadastro"
                   />
-                </StyButtonWrapper>
-              </StyInputContent>
-              <StyLine />
-              <StyButtonsContent>
-                <span>Novo por aqui? Crie um </span>
-                <UnderlineButton
-                  id="new-user"
-                  type="button"
-                  action={() => navigate("/new-user")}
-                  title="Novo Cadastro"
-                />
-              </StyButtonsContent>
-            </Form>
+                </StyButtonsContent>
+              </Form>
+            </>
           )}
           {(doLoginLoad || goGetUserAfterLoginLoad) && (
             <StySpinnerContent>
               <Spinner size={Sizes.xl} />
             </StySpinnerContent>
+          )}
+          {welcomeUser && (
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <Text size="20px" value="Bem Vindo," />
+              <Text
+                size="20px"
+                hasMargin
+                fontWeight="600"
+                value={welcomeUser}
+              />
+            </div>
           )}
         </StyWrapper>
       </StyContainer>

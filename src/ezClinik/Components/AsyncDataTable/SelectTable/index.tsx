@@ -103,7 +103,7 @@ export const SelectTable: React.FC<IProps> = ({
                 key={item.itemValue}
                 onClick={(e) => handleSelect(item, onChange, e)}
               >
-                <Text size={Sizes.xxs} value={item.itemLabel} />
+                <Text size="16px" value={item.itemLabel} />
               </StySelectLabelExpanded>
             ))}
         </StySelectExpanded>
