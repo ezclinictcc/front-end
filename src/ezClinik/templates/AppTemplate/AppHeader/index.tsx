@@ -15,7 +15,7 @@ import { StyContainer, StyLabelText, StyUserInfo } from "./styles";
  * @returns CD Header System.
  */
 export const AppHeader: React.FC<{}> = () => {
-  const { setHasTransition, setNavigateTo }: any =
+  const { setHasTransition, setActionName }: any =
     useContext(TransitionContext);
   const dispatch = useDispatch();
   const { fireToast }: any = useContext(ToastContext);
@@ -23,13 +23,8 @@ export const AppHeader: React.FC<{}> = () => {
   const { fetch: doLogoutRequest, pending: doLogoutLoad } = useAsync({
     promiseFn: doLogout,
     onData: (data) => {
-      dispatch(userLogOut());
-      fireToast({
-        criticy: CriticyType.success,
-        message: "Logout Realizado com Sucesso.",
-      });
       setHasTransition(true);
-      setNavigateTo("./login");
+      setActionName("logout");
     },
     onError: (_error: any) => {
       fireToast({

@@ -40,7 +40,7 @@ import {
  * @returns EZClinik Home.
  */
 export const EZClinikLogin: React.FC<{}> = () => {
-  const { setHasTransition, setNavigateTo }: any =
+  const { setHasTransition, setActionFunction, setActionName }: any =
     useContext(TransitionContext);
 
   const { fireToast }: any = useContext(ToastContext);
@@ -54,27 +54,25 @@ export const EZClinikLogin: React.FC<{}> = () => {
       promiseFn: getUsersDataLogin,
       onData: (data) => {
         if (userLogged && data?.length === 1) {
-          dispatch(
-            userLogIn({
-              id: userLogged.id,
-              token: userLogged.token,
-              email: data[0].email,
-              idUser: data[0].id,
-              idProfile: data[0].idProfile,
-              idUserType: data[0].idUserType,
-              name: data[0].name,
-            })
-          );
+          setActionFunction({
+            id: userLogged.id,
+            token: userLogged.token,
+            email: data[0].email,
+            idUser: data[0].id,
+            idProfile: data[0].idProfile,
+            idUserType: data[0].idUserType,
+            name: data[0].name,
+          });
+          setActionName("login");
+          setHasTransition(true);
           fireToast({
             criticy: CriticyType.success,
             message: "Login Realizado com Sucesso.",
           });
-          setHasTransition(true);
-          setNavigateTo("./home");
         } else {
           fireToast({
             criticy: CriticyType.error,
-            message: "Usuário ou senha incorretas.",
+            message: "E-mail ou senha inválidos.",
           });
         }
       },
@@ -98,7 +96,7 @@ export const EZClinikLogin: React.FC<{}> = () => {
     onError: (_error: any) => {
       fireToast({
         criticy: CriticyType.error,
-        message: "Erro ao criar o usuário.",
+        message: "E-mail ou senha inválidos.",
       });
     },
   });

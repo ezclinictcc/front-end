@@ -94,4 +94,5 @@ export const StySpinnerContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 150px;
 `;

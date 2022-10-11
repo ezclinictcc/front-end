@@ -21,8 +21,8 @@ export const EZClinikPageNotFound: React.FC<{}> = () => {
         <FillButton
           id="submit"
           type="submit"
-          action={() => navigate("/login")}
-          title="Retornar para Login"
+          action={() => navigate("/home")}
+          title="Retornar para Home"
         />
       </StyContainer>
     </>

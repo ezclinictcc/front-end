@@ -183,64 +183,66 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
     <StyContainer>
       <StyHeader>
         <StyTitle>
-          <Text fontWeight="600" size="24px" value="Cadastrar Profissional" />
+          <Text fontWeight="600" size="24px" value="Profissionais da Clínica" />
         </StyTitle>
       </StyHeader>
       <StyBody>
-        <StyFilters>
-          <SimpleInput
-            id="input-professional-id"
-            title="Pesquisar"
-            placeholder="E-mail do Profissional"
-            width="350px"
-            handleChange={(dataValue: string) => setEmailFilter(dataValue)}
-          />
-          <NoFillButton
-            id="add-user-id"
-            title="+ Novo Profissional"
-            action={() => navigate("/clinic-professionals/new")}
-            width="180px"
-            height="40px"
-            borderColor="rgb(0,185,156)"
-            color="rgb(0,185,156)"
-          />
-        </StyFilters>
         {clinicId && (
-          <AsyncDataTable
-            promiseFn={getUsersData}
-            //   onChange={(user: any) => handleSelectedUsers(user)}
-            //   onRowClick={(userData: any) => openModalByUserId(userData)}
-            onChangeId={(usersId: any) => setSelectedUsersId(usersId)}
-            headers={["Nome", "E-mail"]}
-            columns={["name", "email"]}
-            customWidth={["3%", "47%", "50%"]}
-            initialOrdenate="name"
-            id="Basic-Table-User"
-            rowKey="id"
-            disableKey="na_status"
-            disableKeyValue="Inativo"
-            paramsFilter={clinicId}
-            perPageColumn={["25", "50", "100", "200", "500"]}
-            bundles={{
-              qttSearch: "Profissional",
-              showing: "Exibindo",
-              of: "de",
-              rowsSelected: "selecionado",
-              page: "Páginas",
-              qttSearchPlural: "Profissionais",
-              rowsSelectedPlural: "selecionados",
-              noData: "Sem Data",
-              registration: "registrado",
-              registrationPlural: "registrados",
-            }}
-            initialOrder={{
-              orderName: "name",
-              orderGrowing: true,
-            }}
-            buttonsActions={buttonsActions}
-            reloadTable={!delelteUserLoad}
-            loading={delelteUserLoad}
-          />
+          <>
+            <StyFilters>
+              <SimpleInput
+                id="input-professional-id"
+                title="Pesquisar"
+                placeholder="E-mail do Profissional"
+                width="350px"
+                handleChange={(dataValue: string) => setEmailFilter(dataValue)}
+              />
+              <NoFillButton
+                id="add-user-id"
+                title="+ Novo Profissional"
+                action={() => navigate("/clinic-professionals/new")}
+                width="180px"
+                height="40px"
+                borderColor="rgb(0,185,156)"
+                color="rgb(0,185,156)"
+              />
+            </StyFilters>
+            <AsyncDataTable
+              promiseFn={getUsersData}
+              //   onChange={(user: any) => handleSelectedUsers(user)}
+              //   onRowClick={(userData: any) => openModalByUserId(userData)}
+              onChangeId={(usersId: any) => setSelectedUsersId(usersId)}
+              headers={["Nome", "E-mail"]}
+              columns={["name", "email"]}
+              customWidth={["3%", "47%", "50%"]}
+              initialOrdenate="name"
+              id="Basic-Table-User"
+              rowKey="id"
+              disableKey="na_status"
+              disableKeyValue="Inativo"
+              paramsFilter={clinicId}
+              perPageColumn={["25", "50", "100", "200", "500"]}
+              bundles={{
+                qttSearch: "Profissional",
+                showing: "Exibindo",
+                of: "de",
+                rowsSelected: "selecionado",
+                page: "Páginas",
+                qttSearchPlural: "Profissionais",
+                rowsSelectedPlural: "selecionados",
+                noData: "Sem Data",
+                registration: "registrado",
+                registrationPlural: "registrados",
+              }}
+              initialOrder={{
+                orderName: "name",
+                orderGrowing: true,
+              }}
+              buttonsActions={buttonsActions}
+              reloadTable={delelteUserLoad}
+              loading={delelteUserLoad}
+            />
+          </>
         )}
         {!clinicId && (
           <StySpinnerContent>

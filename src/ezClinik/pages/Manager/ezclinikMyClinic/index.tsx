@@ -1,6 +1,6 @@
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
-import React, { useContext, useRef, useEffect } from "react";
+import React, { useContext, useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FillButton } from "../../../Components/Buttons/FillButton";
 import InputSoft from "../../../Components/InputSoft";
@@ -9,6 +9,7 @@ import useAsync from "../../../hooks/useAsync";
 import {
   getClinicData,
   insertClinic,
+  updateClinic,
   insertUser,
 } from "../../../services/controllers/identity-controller";
 import { ToastContext } from "../../../store/toast";
@@ -40,19 +41,36 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
   const { fireToast }: any = useContext(ToastContext);
   const loggedUser = useSelector(selectLoggedUser);
   const formRef = useRef<FormHandles & HTMLFormElement>(null);
+  const [clinicInitialData, setClinicInitialData] = useState<any>();
 
   const { fetch: insertClinicRequest, pending: insertUserLoad } = useAsync({
     promiseFn: insertClinic,
     onData: (data) => {
       fireToast({
         criticy: CriticyType.success,
-        message: "Usuário criado com sucesso.",
+        message: "Clínica criada com sucesso.",
       });
     },
     onError: (_error: any) => {
       fireToast({
         criticy: CriticyType.error,
-        message: "Erro ao criar o usuário.",
+        message: "Erro ao criar clínica.",
+      });
+    },
+  });
+
+  const { fetch: updateClinicRequest, pending: updateUserLoad } = useAsync({
+    promiseFn: updateClinic,
+    onData: (data) => {
+      fireToast({
+        criticy: CriticyType.success,
+        message: "Clínica atualizada com sucesso.",
+      });
+    },
+    onError: (_error: any) => {
+      fireToast({
+        criticy: CriticyType.error,
+        message: "Erro ao atualizar clínica.",
       });
     },
   });
@@ -60,6 +78,27 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
   const { fetch: getClinicRequest, pending: getClinicLoad } = useAsync({
     promiseFn: getClinicData,
     onData: (data) => {
+      if (data) {
+        const clinicSpecialitySplit = data[0]?.clinicSpecialty.split(";");
+        const initialValeuSpeciality: any = [];
+        clinicSpeciality.forEach((speciality: any) => {
+          if (clinicSpecialitySplit.includes(speciality.value)) {
+            initialValeuSpeciality.push(speciality);
+          }
+        });
+        setClinicInitialData({
+          id: data[0].id,
+          name: data[0].name,
+          clinicSpecialty: data[0].clinicSpecialty,
+          formatClinicSpecialty: initialValeuSpeciality,
+          country: data[0].country,
+          state: data[0].state,
+          city: data[0].city,
+          district: data[0].district,
+          number: data[0].number,
+          cep: data[0].cep,
+        });
+      }
       // fireToast({
       //   criticy: CriticyType.success,
       //   message: "Usuário criado com sucesso.",
@@ -74,7 +113,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
   });
 
   useEffect(() => {
-    getClinicRequest(loggedUser.id);
+    getClinicRequest(loggedUser.tokenDecode.idUser);
   }, [loggedUser]);
 
   function getSchema() {
@@ -98,7 +137,12 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
       .then(() => {
         data.number = Number(data.number);
         data.idUser = loggedUser.tokenDecode.idUser;
-        insertClinicRequest(data);
+        if (clinicInitialData.id) {
+          data.id = clinicInitialData.id;
+          updateClinicRequest(data);
+        } else {
+          insertClinicRequest(data);
+        }
         formRef.current?.setErrors({});
       })
       .catch((err: any) => {
@@ -143,6 +187,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
                   width="400px"
                   label="Nome"
                   placeholder="Nome do Usuário"
+                  initialValue={clinicInitialData?.name}
                 />
                 <SelectBox
                   id="clinicSpecialty-selectbox"
@@ -156,6 +201,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
                   hasMargin={false}
                   hasReset
                   width="400px"
+                  initialValue={clinicInitialData?.formatClinicSpecialty}
                 />
               </StyCentralize>
             </StyInfoAccess>
@@ -170,6 +216,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
                       formRef={formRef}
                       width="350px"
                       label="País"
+                      initialValue={clinicInitialData?.country}
                     />
                     <InputSoft
                       id="state"
@@ -177,6 +224,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
                       formRef={formRef}
                       width="350px"
                       label="Estado"
+                      initialValue={clinicInitialData?.state}
                     />
                     <InputSoft
                       id="city"
@@ -184,6 +232,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
                       formRef={formRef}
                       width="350px"
                       label="Cidade"
+                      initialValue={clinicInitialData?.city}
                     />
                   </StyCentralize>
                 </div>
@@ -194,6 +243,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
                     formRef={formRef}
                     width="350px"
                     label="Complemento"
+                    initialValue={clinicInitialData?.district}
                   />
                   <InputSoft
                     id="number"
@@ -202,6 +252,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
                     width="350px"
                     label="Número"
                     onlyNumbers
+                    initialValue={clinicInitialData?.number}
                   />
                   <InputSoft
                     id="cep"
@@ -209,6 +260,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
                     formRef={formRef}
                     width="350px"
                     label="CEP"
+                    initialValue={clinicInitialData?.cep}
                   />
                 </StyCentralize>
               </div>
@@ -219,7 +271,7 @@ export const EZClinikMyClinic: React.FC<{}> = () => {
               id="login"
               type="submit"
               width="150px"
-              title="Cadastrar"
+              title={clinicInitialData?.id ? "Atualizar" : "Cadastrar"}
             />
           </StyButtonSubmit>
         </Form>

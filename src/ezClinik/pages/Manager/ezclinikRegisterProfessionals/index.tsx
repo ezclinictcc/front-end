@@ -121,7 +121,7 @@ export const EZClinikRegisterProfessionals: React.FC<{}> = () => {
     <StyContainer>
       <StyHeader>
         <StyTitle>
-          <Text fontWeight="600" size="24px" value="Profissionais da Clínica" />
+          <Text fontWeight="600" size="24px" value="Cadastrar Profissional" />
         </StyTitle>
       </StyHeader>
       <StyBody>
