@@ -65,7 +65,7 @@ const HstToast: React.FC<IProps> = ({ id, message, time = 5 }) => {
       case CriticyType.warning:
         return {
           Icon: <WarningIcon fill="#fff" height="16px" width="16px" />,
-          background: "yellow",
+          background: "rgb(205, 132, 0)",
         };
       case CriticyType.success:
         return {

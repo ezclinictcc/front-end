@@ -1,5 +1,5 @@
-import axios from "axios";
 import { getBaseURL } from "../propertiesAccess";
+import customAxios from "../../utils/customAxios";
 
 /**
  * @description makes http request according to the informed data.
@@ -20,7 +20,7 @@ const fetch = ({
     const tokenSplit = loggedSession && JSON.parse(JSON.parse(loggedSession).loggedUser);
 
     if (!service) throw Error("url.not.found");
-    axios({
+    customAxios({
       headers: {
         ...headers,
         Authorization: tokenSplit.token 

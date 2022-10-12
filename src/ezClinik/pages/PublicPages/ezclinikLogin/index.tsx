@@ -1,7 +1,7 @@
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
 import * as yup from "yup";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   StyButtonsContent,
@@ -126,6 +126,17 @@ export const EZClinikLogin: React.FC<{}> = () => {
         }
       });
   }
+
+  useEffect(() => {
+    const LogoutSession = sessionStorage.getItem("token_expired");
+    if (LogoutSession) {
+      fireToast({
+        criticy: CriticyType.warning,
+        message: "Sua sessão expirou. Realize o login novamente.",
+      });
+      sessionStorage.removeItem("token_expired");
+    }
+  }, []);
 
   return (
     <>

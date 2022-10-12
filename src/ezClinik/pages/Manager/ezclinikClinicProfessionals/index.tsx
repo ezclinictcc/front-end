@@ -91,7 +91,7 @@ export const EZClinikClinicProfessionals: React.FC<{}> = () => {
   function handleNotImplemented() {
     fireToast({
       criticy: CriticyType.info,
-      message: "Functionalidade ainda não implementada.",
+      message: "Funcionalidade ainda não implementada.",
     });
   }
 

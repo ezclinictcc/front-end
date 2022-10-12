@@ -27,8 +27,6 @@ export const EZClinikHome: React.FC<{}> = () => {
     PATIENT: "Paciente",
   };
 
-  console.log("loggedUser: ", loggedUser);
-
   return (
     <>
       <StyContainer>
@@ -102,7 +100,7 @@ export const EZClinikHome: React.FC<{}> = () => {
                       />
                       <Text
                         size="18px"
-                        value={`Na página "Histórico de Consultas", você conseguirá visualizar todas as consutas realizadas pelos profissionais cadastrados na sua clínica.`}
+                        value={`Na página "Histórico de Consultas", você conseguirá visualizar todas as consultas realizadas pelos profissionais cadastrados na sua clínica.`}
                       />
                       <Text
                         size="18px"

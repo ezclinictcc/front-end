@@ -32,7 +32,7 @@ export const EZClinikScheduleAppointment: React.FC<{}> = () => {
   function handleChange() {
     fireToast({
       criticy: CriticyType.info,
-      message: "Functionalidade ainda não implementada.",
+      message: "Funcionalidade ainda não implementada.",
     });
   }
 
